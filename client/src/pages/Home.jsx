@@ -11,23 +11,33 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
+// Local Assets
+import desktop1 from '../assets/images/desktop1.png';
+import desktop2 from '../assets/images/desktop2.png';
+import mobile1 from '../assets/images/mobile1.png';
+import mobile2 from '../assets/images/mobile2.png';
+import mobile3 from '../assets/images/mobile3.png';
+
 const slides = [
   {
-    image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+    desktopImage: desktop1,
+    mobileImage: mobile1,
     title: 'Best Fruit Shop in Janakpuri',
     subtitle: 'Fresh, organic & premium fruits delivered to your doorstep',
     buttonText: 'Shop Now',
     action: '/products'
   },
   {
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+    desktopImage: desktop2,
+    mobileImage: mobile2,
     title: 'Freshness You Can Trust',
     subtitle: 'Handpicked fruits with best quality & taste',
     buttonText: 'Explore Fruits',
     action: '/products'
   },
   {
-    image: 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+    desktopImage: desktop1, // Fallback to desktop1 since desktop3 is missing
+    mobileImage: mobile3,
     title: 'Fast Home Delivery',
     subtitle: 'Get fruits delivered in Janakpuri & nearby areas',
     buttonText: 'Order Now',
@@ -47,8 +57,8 @@ const Home = () => {
            api.get('/products?type=single'),
            api.get('/products?type=basket')
         ]);
-        setProducts(productsRes.data.slice(0, 3)); // show top 3 single products
-        setBaskets(basketsRes.data.slice(0, 3)); // show top 3 baskets
+        setProducts(productsRes.data.slice(0, 3)); 
+        setBaskets(basketsRes.data.slice(0, 3)); 
       } catch (error) {
         console.error('Failed fetching payload', error);
       } finally {
@@ -59,223 +69,222 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      {/* Hero Section Carousel */}
-      <section className="w-full">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay, EffectFade]}
-          effect="fade"
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          className="w-full h-[50vh] md:h-[65vh]"
-          loop={true}
-        >
-          {slides.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <div 
-                className="w-full h-full bg-cover bg-center relative flex items-center"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              >
-                {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-black/40"></div>
-                
-                {/* Slide Text Content */}
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center md:text-left">
-                  <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-lg">
-                    {slide.title}
-                  </h1>
-                  <p className="text-lg md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto md:mx-0 drop-shadow-md font-medium">
-                    {slide.subtitle}
-                  </p>
-                  
-                  {slide.action === 'scroll' ? (
-                     <button 
-                       onClick={() => document.getElementById('featured-products')?.scrollIntoView({ behavior: 'smooth' })}
-                       className="bg-brand hover:bg-brand-dark text-white px-8 py-4 rounded-full text-lg font-bold transition shadow-xl hover:-translate-y-1 inline-block"
-                     >
-                       {slide.buttonText}
-                     </button>
-                  ) : (
-                     <Link 
-                       to={slide.action} 
-                       className="bg-brand hover:bg-brand-dark text-white px-8 py-4 rounded-full text-lg font-bold transition shadow-xl hover:-translate-y-1 inline-block"
-                     >
-                       {slide.buttonText}
-                     </Link>
-                  )}
-                </div>
+    <div className="bg-bg-main overflow-x-hidden">
+      {/* Hero Section */}
+      <section className="relative pt-10 md:pt-20 overflow-hidden">
+        <div className="container-custom relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <div className="flex-1 text-center lg:text-left space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full text-accent font-bold text-xs uppercase tracking-widest border border-accent/20">
+                <Leaf className="w-4 h-4" />
+                <span>100% Organic & Fresh</span>
               </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
-
-      {/* Shop By Category */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Shop by Category</h2>
-            <div className="w-24 h-1.5 bg-brand mx-auto rounded-full"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <Link to="/products?category=Fruits" className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300 pointer-events-auto">
-              <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=600&q=80" alt="Fruits" className="w-full h-[300px] object-cover group-hover:scale-110 transition duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
-                 <h3 className="text-3xl font-black text-white mb-2 transform group-hover:-translate-y-2 transition duration-300">Daily Fruits</h3>
-                 <span className="text-brand-light font-bold flex items-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:-translate-y-2 transition duration-300">Shop Collection <ChevronRight className="w-5 h-5 ml-1"/></span>
-              </div>
-            </Link>
-            
-            <Link to="/products?category=Exotic" className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300 pointer-events-auto">
-              <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=600&q=80" alt="Exotic Fruits" className="w-full h-[300px] object-cover group-hover:scale-110 transition duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
-                 <h3 className="text-3xl font-black text-white mb-2 transform group-hover:-translate-y-2 transition duration-300">Exotic Fruits</h3>
-                 <span className="text-brand-light font-bold flex items-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:-translate-y-2 transition duration-300">Shop Collection <ChevronRight className="w-5 h-5 ml-1"/></span>
-              </div>
-            </Link>
-            
-            <Link to="/products?category=Seasonal" className="relative group rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300 pointer-events-auto">
-              <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=600&q=80" alt="Seasonal Fruits" className="w-full h-[300px] object-cover group-hover:scale-110 transition duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
-                 <h3 className="text-3xl font-black text-white mb-2 transform group-hover:-translate-y-2 transition duration-300">Seasonal Picks</h3>
-                 <span className="text-brand-light font-bold flex items-center opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:-translate-y-2 transition duration-300">Shop Collection <ChevronRight className="w-5 h-5 ml-1"/></span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Fruit Baskets */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">🎁 Pre-Made Fruit Baskets</h2>
-             <p className="text-gray-500 font-medium">Perfect for gifting, festivals, and health bundles.</p>
-          </div>
-          <Link to="/products?type=basket" className="hidden sm:inline-flex items-center font-bold text-brand hover:text-brand-dark transition">
-             View All Baskets <ChevronRight className="w-5 h-5 ml-1"/>
-          </Link>
-        </div>
-
-        {isLoading ? (
-          <div className="flex justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div></div>
-        ) : baskets.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {baskets.map(basket => {
-              const displayImage = basket.images?.length > 0 ? basket.images[0] : '/placeholder.png';
-              return (
-              <div key={basket._id} className="bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-2xl transition duration-300 border border-gray-100 group relative">
-                <Link to={`/product/${basket._id}`} className="block overflow-hidden relative">
-                   {basket.tags?.includes('Best Seller') && <span className="absolute top-4 left-4 z-10 bg-yellow-400 text-yellow-900 px-3 py-1 bg-opacity-90 backdrop-blur rounded-full text-xs font-black tracking-wider uppercase">Best Seller</span>}
-                   {basket.tags?.includes('Festival Special') && <span className="absolute top-4 left-4 z-10 bg-red-500 text-white px-3 py-1 bg-opacity-90 backdrop-blur rounded-full text-xs font-black tracking-wider uppercase">Festival Special</span>}
-                   <img src={displayImage} alt={basket.name} className="w-full h-64 object-cover group-hover:scale-105 transition duration-500" />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+              <h1 className="text-5xl md:text-7xl font-display font-bold text-primary leading-[1.1] tracking-tight">
+                Freshness delivered <br/>
+                <span className="text-accent">to your doorstep.</span>
+              </h1>
+              <p className="text-text-muted text-lg md:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                Experience the finest selection of handpicked fruits, delivered fresh within 24 hours. 
+                Premium quality fruits for a healthier lifestyle.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                <Link to="/products" className="bg-accent hover:bg-accent-dark text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-xl shadow-accent/20 hover:shadow-accent/40 hover:-translate-y-1 w-full sm:w-auto text-center">
+                  Shop Now
                 </Link>
-                <div className="p-8">
-                  <Link to={`/product/${basket._id}`} className="text-2xl font-bold text-gray-900 hover:text-brand transition">{basket.name}</Link>
-                  <p className="text-gray-500 mt-3 text-sm line-clamp-2 leading-relaxed font-medium">{basket.description}</p>
-                  <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-6">
-                    <span className="text-3xl font-black text-gray-900">₹{basket.price}</span>
-                    <Link to={`/product/${basket._id}`} className="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-full font-bold transition shadow-md hover:-translate-y-1">View Bundle</Link>
-                  </div>
+                <Link to="/products?type=basket" className="bg-white hover:bg-slate-50 text-primary border border-slate-200 px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 w-full sm:w-auto text-center">
+                  View Gift Baskets
+                </Link>
+              </div>
+              <div className="flex items-center justify-center lg:justify-start gap-8 pt-8">
+                <div className="text-center lg:text-left">
+                  <p className="text-2xl font-display font-bold text-primary">5k+</p>
+                  <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Happy Clients</p>
+                </div>
+                <div className="w-px h-10 bg-slate-200"></div>
+                <div className="text-center lg:text-left">
+                  <p className="text-2xl font-display font-bold text-primary">24h</p>
+                  <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Fast Delivery</p>
+                </div>
+                <div className="w-px h-10 bg-slate-200"></div>
+                <div className="text-center lg:text-left">
+                  <p className="text-2xl font-display font-bold text-primary">100%</p>
+                  <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Organic</p>
                 </div>
               </div>
-            )})}
+            </div>
+            
+            <div className="flex-1 relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-accent/5 rounded-full blur-[120px] -z-10"></div>
+               <img 
+                 src={desktop1} 
+                 alt="Premium Fruits" 
+                 className="w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-3xl"
+               />
+               <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-3xl shadow-premium border border-slate-100 hidden md:block">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+                       <Leaf className="text-green-600 w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-primary">Natural Freshness</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Handpicked daily</p>
+                    </div>
+                  </div>
+               </div>
+            </div>
           </div>
-        ) : (
-          <p className="text-center text-gray-500 py-10 font-medium">Baskets are currently being prepared.</p>
-        )}
+        </div>
+      </section>
+
+      {/* Featured Baskets */}
+      <section className="section-padding">
+        <div className="container-custom">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+            <div className="space-y-4 text-center md:text-left">
+               <h2 className="text-3xl md:text-5xl font-display font-bold text-primary tracking-tight">Curated Fruit Baskets</h2>
+               <p className="text-text-muted text-lg font-medium max-w-xl">Beautifully packed, farm-fresh fruit collections perfect for gifting or personal health.</p>
+            </div>
+            <Link to="/products?type=basket" className="group flex items-center gap-2 font-bold text-accent hover:text-accent-dark transition-all duration-300">
+               Explore all baskets <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div></div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {baskets.map(basket => (
+                <Link 
+                  key={basket._id} 
+                  to={`/product/${basket._id}`}
+                  className="group bg-white rounded-3xl shadow-premium border border-slate-100 overflow-hidden hover:shadow-premium-hover transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img 
+                      src={basket.images?.[0] || '/placeholder.png'} 
+                      alt={basket.name} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  <div className="p-8 flex flex-col flex-grow">
+                    <h3 className="text-2xl font-display font-bold text-primary mb-3 group-hover:text-accent transition-colors">{basket.name}</h3>
+                    <p className="text-text-muted text-sm line-clamp-2 mb-6 font-medium leading-relaxed">{basket.description}</p>
+                    <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-50">
+                       <span className="text-2xl font-display font-bold text-primary">₹{basket.price}</span>
+                       <span className="text-accent font-bold text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0">
+                         Order Now <ChevronRight className="w-4 h-4" />
+                       </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Featured Products */}
-      <section id="featured-products" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Featured Fresh Picks</h2>
-        {isLoading ? (
-          <div className="flex justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div></div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map(product => {
-              const displayImage = product.images?.length > 0 ? product.images[0] : '/placeholder.png';
-              return (
-              <div key={product._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-                <Link to={`/product/${product._id}`} className="block overflow-hidden">
-                   <img src={displayImage} alt={product.name} className="w-full h-48 object-cover hover:scale-105 transition duration-300" />
-                </Link>
-                <div className="p-6">
-                  <Link to={`/product/${product._id}`} className="text-xl font-bold text-gray-800 hover:text-brand transition">{product.name}</Link>
-                  <p className="text-gray-500 mt-2 text-sm line-clamp-2">{product.description}</p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-2xl font-bold text-brand-dark">₹{product.price}</span>
-                    <Link to={`/product/${product._id}`} className="text-brand hover:text-brand-dark font-semibold">View Details &rarr;</Link>
-                  </div>
-                </div>
-              </div>
-            )})}
+      <section className="section-padding bg-slate-50/50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        <div className="container-custom">
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+             <h2 className="text-3xl md:text-5xl font-display font-bold text-primary tracking-tight">Our Fresh Picks</h2>
+             <p className="text-text-muted text-lg font-medium">Seasonal favorites and exotic finds, sourced with love.</p>
           </div>
-        )}
-      </section>
 
-      {/* Promotional Banner */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-brand-dark">
-             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?w=1920&q=80')] bg-cover bg-center opacity-20 hover:scale-105 transition duration-[2000ms]"></div>
-             <div className="relative z-10 py-16 px-8 md:px-16 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between">
-                <div className="max-w-2xl">
-                  <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Best Fruit Shop in Janakpuri</h2>
-                  <p className="text-lg md:text-xl text-brand-light/90 mb-10 lg:mb-0 font-medium leading-relaxed">Looking for farm-fresh, chemical-free fruits? We deliver premium quality produce handpicked daily from the best farms directly to your doorstep. Guaranteed freshness or your money back!</p>
-                </div>
-                <div className="shrink-0">
-                  <Link to="/products" className="bg-white text-brand-dark hover:bg-brand-light hover:text-white border-2 border-white px-10 py-4 rounded-full text-xl font-bold shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-300 inline-block">
-                     Shop The Collection
-                  </Link>
-                </div>
-             </div>
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div></div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {products.map(product => (
+                <Link 
+                  key={product._id} 
+                  to={`/product/${product._id}`}
+                  className="bg-white rounded-[2rem] p-4 shadow-premium border border-slate-100 hover:shadow-premium-hover transition-all duration-500 group"
+                >
+                  <div className="relative aspect-square rounded-[1.5rem] overflow-hidden mb-6">
+                    <img 
+                      src={product.images?.[0] || '/placeholder.png'} 
+                      alt={product.name} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    />
+                  </div>
+                  <div className="px-4 pb-4">
+                    <div className="flex justify-between items-start mb-2">
+                       <h3 className="text-xl font-display font-bold text-primary group-hover:text-accent transition-colors">{product.name}</h3>
+                       <span className="text-lg font-display font-bold text-primary">₹{product.price}</span>
+                    </div>
+                    <p className="text-text-muted text-sm line-clamp-2 mb-6 font-medium leading-relaxed">{product.description}</p>
+                    <div className="flex items-center gap-2 text-accent font-bold text-xs uppercase tracking-widest">
+                       View Details <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
-            <div className="w-24 h-1.5 bg-brand mx-auto rounded-full"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Feature 1 */}
-            <div className="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl text-center border border-gray-100 hover:-translate-y-2 transition duration-300 group">
-               <div className="w-24 h-24 mx-auto bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-8 group-hover:bg-green-600 group-hover:text-white transition duration-300">
-                 <Leaf className="w-12 h-12" />
+      <section className="section-padding">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="space-y-6 text-center md:text-left">
+               <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mx-auto md:mx-0">
+                  <Leaf className="w-8 h-8" />
                </div>
-               <h3 className="text-2xl font-bold text-gray-800 mb-4">Farm Fresh</h3>
-               <p className="text-gray-500 font-medium leading-relaxed">100% organic and fresh fruits sourced directly from trusted farmers every morning.</p>
+               <h3 className="text-2xl font-display font-bold text-primary">Premium Quality</h3>
+               <p className="text-text-muted font-medium leading-relaxed">
+                 We source our fruits from certified organic farms, ensuring every bite is packed with natural goodness.
+               </p>
             </div>
             
-            {/* Feature 2 */}
-            <div className="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl text-center border border-gray-100 hover:-translate-y-2 transition duration-300 group">
-               <div className="w-24 h-24 mx-auto bg-blue-50 text-brand rounded-full flex items-center justify-center mb-8 group-hover:bg-brand group-hover:text-white transition duration-300">
-                 <Truck className="w-12 h-12" />
+            <div className="space-y-6 text-center md:text-left">
+               <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mx-auto md:mx-0">
+                  <Truck className="w-8 h-8" />
                </div>
-               <h3 className="text-2xl font-bold text-gray-800 mb-4">Fast Delivery</h3>
-               <p className="text-gray-500 font-medium leading-relaxed">Lightning fast delivery across Janakpuri and surrounding locations right to your doorstep.</p>
+               <h3 className="text-2xl font-display font-bold text-primary">Express Delivery</h3>
+               <p className="text-text-muted font-medium leading-relaxed">
+                 From our store to your door in less than 24 hours. Freshness is guaranteed with every order.
+               </p>
             </div>
             
-            {/* Feature 3 */}
-            <div className="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl text-center border border-gray-100 hover:-translate-y-2 transition duration-300 group">
-               <div className="w-24 h-24 mx-auto bg-yellow-50 text-amber-500 rounded-full flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-white transition duration-300">
-                 <Tag className="w-12 h-12" />
+            <div className="space-y-6 text-center md:text-left">
+               <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mx-auto md:mx-0">
+                  <Tag className="w-8 h-8" />
                </div>
-               <h3 className="text-2xl font-bold text-gray-800 mb-4">Best Prices</h3>
-               <p className="text-gray-500 font-medium leading-relaxed">Premium quality doesn't have to break the bank. Get the fairest market prices always.</p>
+               <h3 className="text-2xl font-display font-bold text-primary">Direct Sourcing</h3>
+               <p className="text-text-muted font-medium leading-relaxed">
+                 By cutting out the middlemen, we provide premium quality fruits at the fairest market prices.
+               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Newsletter / CTA */}
+      <section className="pb-24 pt-10">
+        <div className="container-custom">
+          <div className="bg-primary rounded-[3rem] p-12 md:p-20 relative overflow-hidden text-center space-y-8">
+             <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
+             <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
+             
+             <h2 className="text-3xl md:text-6xl font-display font-bold text-white tracking-tight relative z-10">
+               Ready to taste <br className="hidden md:block"/> natural excellence?
+             </h2>
+             <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto relative z-10">
+               Join thousands of families getting their daily dose of health delivered fresh.
+             </p>
+             <div className="pt-4 relative z-10">
+                <Link to="/products" className="inline-block bg-white text-primary hover:bg-slate-50 px-12 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-2xl">
+                  Explore The Collection
+                </Link>
+             </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
